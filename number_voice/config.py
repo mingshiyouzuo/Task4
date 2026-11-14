@@ -8,7 +8,6 @@ RECOGNIZE_DIR = PROJECT_DIR / "recordings"
 SAMPLE_RATE = 22050  # 每秒采样次数
 CHANNELS = 1  # 单声道
 SAMPLE_WIDTH = 2  # 每次采样2字节
-CLIP_SECONDS = 1.2  # 每段录音1.2秒
 
 TOKEN_FILES = dict(
     zip(
