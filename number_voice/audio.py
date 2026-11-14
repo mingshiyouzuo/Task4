@@ -33,7 +33,7 @@ class AudioStore:
         missing = self.missing(tokens)
         if missing:
             raise ValueError("请先准备录音文件：" + "、".join(missing))
-        device = self._devive_factory()
+        device = self._device_factory()
         with device.RawOutputStream(
                 samplerate=SAMPLE_RATE, channels=CHANNELS, dtype="int16"
         ) as stream:

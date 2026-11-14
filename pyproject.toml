@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptolls.build_meta"
+
+[project]
+name = "number-voice"
+version = "1.0.0"
+description = "数字录音播放：给定一个数字文本，用自己的录音播放其读法"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["sounddevice>=0.4.6,<1.0"]
+
+[project.scripts]
+number-voice = "number_voice.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["number_voice*"]
