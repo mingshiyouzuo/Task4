@@ -132,12 +132,45 @@ python check_files.py
 - 小数部分始终逐位读。
 - 不接受空格、正号、全角数字或千分位逗号。
 
+## 软件架构
+
+程序采用三层结构：
+
+- **表现层** `cli.py`：菜单循环、输入读取、读法选择、结果打印与错误提示，不含业务规则；
+- **业务逻辑层**：`numbers.py` 是纯函数模块（数字文本 → 字音列表，无 IO）；`audio.py` 的 `AudioStore` 负责路径映射、缺失检查、WAV 格式校验与顺序播放；
+- **基础设施层** `config.py`：唯一的配置来源，集中保存录音目录、采样率/声道/位深和 19 个字音文件名。
+
+依赖方向为 `cli → numbers / audio → config`，不使用 TTS、图形界面或网络。
+
+**图 1　软件总体架构（分层视图）**
+
+![软件总体架构（分层视图）](docs/images/01-overall-architecture.png)
+
+**图 2　UML 组件图：模块依赖与接口**
+
+![UML 组件图](docs/images/02-component-diagram.png)
+
+**图 3　UML 类图：核心类与模块函数**
+
+![UML 类图](docs/images/03-class-diagram.png)
+
+**图 9　UML 时序图：播放数字（成功与异常）**
+
+![UML 时序图：播放数字](docs/images/09-sequence-diagram.png)
+
+**图 12　总结架构图：一页看懂系统**
+
+![总结架构图](docs/images/12-summary-architecture.png)
+
+全部 13 张图（另有用例图、模块详解、活动图、状态图、总结流程图）见 [`docs/images/`](docs/images)，可编辑源文件为 [`docs/数字录音播报器-软件架构与UML.drawio`](docs/数字录音播报器-软件架构与UML.drawio)，PDF 版为 [`docs/数字录音播报器-软件架构与UML.pdf`](docs/数字录音播报器-软件架构与UML.pdf)。
+
 ## 项目结构
 
 ```text
 number_voice/
 ├── app.py                     # 启动入口
 ├── check_files.py             # 检查 recordings/ 中的 WAV 是否齐全
+├── say_number.py              # 最小示例：单次转换并播放
 ├── number_voice/
 │   ├── __init__.py            # 包信息
 │   ├── __main__.py            # python -m number_voice
@@ -147,6 +180,10 @@ number_voice/
 │   └── cli.py                 # 命令行菜单
 ├── tests/
 │   └── test_numbers.py        # 数字读法测试
+├── docs/
+│   ├── 数字录音播报器-软件架构与UML.drawio
+│   ├── 数字录音播报器-软件架构与UML.pdf
+│   └── images/                # 架构图 PNG（README 引用）
 ├── recordings/                # 外部录制的 WAV
 ├── requirements.txt
 ├── pyproject.toml
@@ -167,7 +204,7 @@ number_voice/
 python -m unittest discover -s tests -v
 ```
 
-`tests/` 只包含数字读法测试，共 4 个测试方法、27 组读法样例，覆盖原题示例、负数、小数、补零和非法输入。
+`tests/` 只包含数字读法测试，共 4 个测试方法、27 组读法样例和 26 组非法输入组合（13 种非法文本 × 2 个转换函数），覆盖原题示例、负数、小数、补零、超长降级和非法输入。
 
 音频播放涉及真实扬声器和外部 WAV，不包含在自动测试中。请使用 `check_files.py`、菜单 `3`、菜单 `4` 和菜单 `2` 人工验证。
 
