@@ -4,7 +4,9 @@ import unittest
 from number_voice.numbers import digit_tokens, number_tokens
 
 
+# 单元测试
 class NumberReaderTests(unittest.TestCase):
+    # 完整的数字文本测试
     def test_number_examples(self):
         examples = {
             "0": "零",
@@ -35,6 +37,7 @@ class NumberReaderTests(unittest.TestCase):
             "10001.001": "一万零一点零零一",
             "99999999999999999999": "九千九百九十九京九千九百九十九兆九千九百九十九亿九千九百九十九万九千九百九十九",
         }
+        # 循环验证的声明和运行结果
         for text, expected in examples.items():
             with self.subTest(text=text):
                 self.assertEqual("".join(number_tokens(text)), expected)
@@ -57,10 +60,11 @@ class NumberReaderTests(unittest.TestCase):
                 "",
                 " 12", "12 ", "+1", "１２", "1\n", "-", "-.", ".", "1.", "1.2.3",
                 "--1", "1,2",
-        ):
-            for converter in (number_tokens, digit_tokens):
-                with self.subTest(text=text, converter=converter.__name__):
-                    with self.assertRaises(ValueError):
+        ):  # 维度一：13 种非法输入
+            for converter in (number_tokens, digit_tokens):  # 维度二：两个入口函数，遍历的是函数！
+                with self.subTest(text=text,
+                                  converter=converter.__name__):  # 每个组合是独立子测试，每一个测试用例使用到的函数在number_tokens与digit_tokens选一个
+                    with self.assertRaises(ValueError):  # 断言"必须抛 ValueError"
                         converter(text)
 
 
