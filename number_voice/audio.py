@@ -15,20 +15,22 @@ def load_sounddevice():
     return sounddevice
 
 
-# 查找录音
+# 定义类AudioStore，负责与播放有关的实现
 class AudioStore:
     def __init__(self, directory=RECOGNIZE_DIR, device_factory=load_sounddevice):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self._device_factory = device_factory
 
+    # 查找路径
     def path(self, token: str) -> Path:
         return self.directory / (TOKEN_FILES[token] + ".wav")
 
+    # 缺失文本对应的音频
     def missing(self, tokens):
         return list(dict.fromkeys(token for token in tokens if not self.path(token).is_file()))
 
-    # 播放音频
+    # 播放音频函数
     def play(self, tokens) -> None:
         missing = self.missing(tokens)
         if missing:

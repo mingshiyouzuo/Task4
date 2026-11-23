@@ -5,9 +5,10 @@ from .numbers import READING_MODES
 
 
 def read_text(prompt="请输入数字："):
-    return input(prompt).strip()
+    return input(prompt).strip()  # 去除字符首尾空白字符
 
 
+# 打印UI+返回mode字符串
 def choose_mode():
     print("选择读法：1. 数值读法 2. 逐位读法")
     choice = input("请选择【1-2】：").strip()
@@ -16,30 +17,37 @@ def choose_mode():
     return "数值读法"
 
 
+# 返回读法单词
 def show_reading(text, mode):
-    tokens = READING_MODES[mode](text)
+    f = READING_MODES[mode]  # 第一步：查字典，得到函数对象  取出对应的函数并调用
+    tokens = f(text)  # 第二步：调用它，传入 text
     print("读法：", "".join(tokens))
     print("字音顺序：", "/".join(tokens))
-    return tokens
+    return tokens  # 返回读法单词
 
 
+# 打印当前音频文件的准备情况
 def print_file_list(store):
-    for index, token in enumerate(TOKEN_FILES, 1):
+    # 迭代字典
+    for index, token in enumerate(TOKEN_FILES, 1):  # 大小与在config定义的列表大小有关
         state = "已准备" if store.path(token).is_file() else "缺失"
-        print(f"{index:2d}. {token} [{state}]")
-    missing = store.missing(list(TOKEN_FILES))
+        print(f"{index:2d}. {token} {state}")
+
+    missing = store.missing(list(TOKEN_FILES))  # 缺失的音频
     print("缺失：", "、".join(missing) if missing else "无")
 
 
+# 选择需要试听的单字
 def choose_token(store):
     print_file_list(store)
     value = input("请输入序号").strip()
-    tokens = list(TOKEN_FILES)
+    tokens = list(TOKEN_FILES)  # 将键转换为可下标列表
     if not value.isdigit() or not 1 <= int(value) <= len(tokens):
         raise ValueError("序号超出范围")
     return tokens[int(value) - 1]
 
 
+# 试听单字，验证用可删除。
 def preview_token(store):
     try:
         token = choose_token(store)
@@ -48,12 +56,13 @@ def preview_token(store):
         print("试听失败：", e)
 
 
+# 播放读法
 def play_number(store):
     text = read_text()
     mode = choose_mode()
     try:
-        tokens = show_reading(text, mode)
-        store.play(tokens)
+        tokens = show_reading(text, mode)  # 先得到读法
+        store.play(tokens)  # 播放函数
     except (ValueError, RuntimeError) as e:
         print("无法播放：", e)
 
