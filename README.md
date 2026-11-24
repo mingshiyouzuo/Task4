@@ -78,6 +78,14 @@ python -m number_voice
 请选择 [1-5]：
 ```
 
+## 发布
+
+最新版本：[v1.0.0](https://github.com/mingshiyouzuo/Task4/releases/tag/v1.0.0)
+
+- macOS arm64 可直接下载 Release 附件 `number-voice-v1.0.0-macos-arm64`，执行 `chmod +x` 后与 `recordings/` 放在同一目录运行。
+- Windows / Linux 请从源码运行，或自行使用 PyInstaller 打包。
+- Release 不包含个人录音 WAV。
+
 ## 录音文件
 
 程序不提供录音界面，需要提前准备 19 个单字 WAV：
@@ -163,7 +171,7 @@ ffmpeg -i input.m4a -ar 22050 -ac 1 -sample_fmt s16 recordings/er.wav
 ## 项目结构
 
 ```text
-number_voice/
+Task4/
 ├── app.py                     # 启动入口
 ├── number_voice/
 │   ├── __init__.py            # 包信息
@@ -205,11 +213,7 @@ python -m unittest discover -s tests -v
 
 ```bash
 python -m compileall -q app.py number_voice tests
-ruff check .
-ruff format --check .
 ```
-
-Ruff 是可选开发工具，不是运行依赖。
 
 ## 已知限制
 
