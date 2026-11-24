@@ -7,6 +7,7 @@ __pycache__/
 # ===== 打包/分发 =====
 build/
 dist/
+*.spec
 develop-eggs/
 downloads/
 eggs/
@@ -73,6 +74,9 @@ dmypy.json
 .project
 .pydevproject
 .settings/
+
+# ===== 文档生成物 =====
+docs/*.pdf
 
 # ===== 操作系统 =====
 .DS_Store

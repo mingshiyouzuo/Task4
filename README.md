@@ -115,13 +115,7 @@ ffmpeg -i input.m4a -ar 22050 -ac 1 -sample_fmt s16 recordings/er.wav
 
 没有 ffmpeg 时，可以用 Audacity 导出为“WAV (Microsoft) signed 16-bit PCM”，采样率选 22050，声道选单声道。
 
-准备文件后可以先检查：
-
-```bash
-python check_files.py
-```
-
-也可以在程序中通过菜单 `3` 查看状态。
+准备文件后运行程序，通过菜单 `3` 查看 19 个字音的状态。
 
 ## 输入规则
 
@@ -141,6 +135,8 @@ python check_files.py
 - **基础设施层** `config.py`：唯一的配置来源，集中保存录音目录、采样率/声道/位深和 19 个字音文件名。
 
 依赖方向为 `cli → numbers / audio → config`，不使用 TTS、图形界面或网络。
+
+下面选 5 张图展示，图号沿用完整图集。
 
 **图 1　软件总体架构（分层视图）**
 
@@ -162,15 +158,13 @@ python check_files.py
 
 ![总结架构图](docs/images/12-summary-architecture.png)
 
-全部 13 张图（另有用例图、模块详解、活动图、状态图、总结流程图）见 [`docs/images/`](docs/images)，可编辑源文件为 [`docs/数字录音播报器-软件架构与UML.drawio`](docs/数字录音播报器-软件架构与UML.drawio)，PDF 版为 [`docs/数字录音播报器-软件架构与UML.pdf`](docs/数字录音播报器-软件架构与UML.pdf)。
+完整 13 张图（含用例图、模块详解、活动图、状态图和总结流程图）保存在可编辑源文件 [`docs/数字录音播报器-软件架构与UML.drawio`](docs/数字录音播报器-软件架构与UML.drawio) 中。
 
 ## 项目结构
 
 ```text
 number_voice/
 ├── app.py                     # 启动入口
-├── check_files.py             # 检查 recordings/ 中的 WAV 是否齐全
-├── say_number.py              # 最小示例：单次转换并播放
 ├── number_voice/
 │   ├── __init__.py            # 包信息
 │   ├── __main__.py            # python -m number_voice
@@ -182,8 +176,7 @@ number_voice/
 │   └── test_numbers.py        # 数字读法测试
 ├── docs/
 │   ├── 数字录音播报器-软件架构与UML.drawio
-│   ├── 数字录音播报器-软件架构与UML.pdf
-│   └── images/                # 架构图 PNG（README 引用）
+│   └── images/                # 5 张精选架构图（README 引用）
 ├── recordings/                # 外部录制的 WAV
 ├── requirements.txt
 ├── pyproject.toml
@@ -206,12 +199,12 @@ python -m unittest discover -s tests -v
 
 `tests/` 只包含数字读法测试，共 4 个测试方法、27 组读法样例和 26 组非法输入组合（13 种非法文本 × 2 个转换函数），覆盖原题示例、负数、小数、补零、超长降级和非法输入。
 
-音频播放涉及真实扬声器和外部 WAV，不包含在自动测试中。请使用 `check_files.py`、菜单 `3`、菜单 `4` 和菜单 `2` 人工验证。
+音频播放涉及真实扬声器和外部 WAV，不包含在自动测试中。请使用菜单 `3`（文件状态）、菜单 `4`（试听单字）和菜单 `2`（播放数字）人工验证。
 
 其他检查：
 
 ```bash
-python -m compileall -q app.py check_files.py number_voice tests
+python -m compileall -q app.py number_voice tests
 ruff check .
 ruff format --check .
 ```

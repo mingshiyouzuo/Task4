@@ -12,11 +12,15 @@ def _parse(text: str) -> Tuple[str, str, Optional[str]]:
     """分割可选的负号、整数部分和小数部分"""
     if not text:
         raise ValueError("请输入数字，比如2382,-23或者12.34")
+
     sign = ""
     body = text
+
     if text.startswith("-"):  # 如果开头是负号，就提取出来
-        sign = "-"
+        # 如果要支持正号，if text[:1] in "+-":
+        sign = text[0]
         body = text[1:]
+
     if not body:
         raise ValueError("负号后面必须有数字")
     if body.count(".") > 1:
@@ -41,7 +45,9 @@ def _digit_tokens(text: str) -> List[str]:
 # 读取每一位，并且去除先导零
 def digit_tokens(text: str) -> List[str]:
     sign, integer, fraction = _parse(text)
-    result = ["负"] if sign == "-" else []
+    result = []
+    if sign == "-":
+        result.append("负")
     result.extend(_digit_tokens(integer or "0"))
 
     if fraction is not None:
@@ -55,6 +61,7 @@ def digit_tokens(text: str) -> List[str]:
 def _group_tokens(value: int) -> List[str]:
     result = []
     pending_zero = False  # 添加零的处理逻辑
+    lead = len(str(value)) - 1  # 最高位对应的索引
 
     # 从高位向低位处理
     for position in range(3, -1, -1):
@@ -62,6 +69,12 @@ def _group_tokens(value: int) -> List[str]:
         if digit:  # 如果不是零,输出数字和单位
             if pending_zero:  # 补上欠下的零
                 result.append("零")
+
+            # 对于二的特殊处理，最高组是二就将其转换为两，此外还需要对
+            # if digit == 2 and position == lead and position >= 2:
+            #     result.append("两")
+            # else:
+            #     result.append(DIGITS[digit])
 
             result.append(DIGITS[digit])  # 输出数字
             if position:  # 不是个位的时候才加单位
@@ -105,7 +118,11 @@ def _integer_tokens(text: str) -> List[str]:
 
         # 对一十单独特殊处理，如果不纠结可以删除
         # 比如12表示为十二而不是一十二
-        part = _group_tokens(group)  # 合并组数字
+        part = _group_tokens(group)  # 处理一组数字
+        # 如果还需要特殊处理
+        if not result and index and group == 2:
+            part = ["两"]
+
         if not result and len(part) >= 2 and part[:2] == ["一", "十"]:
             part.pop(0)  # 弹出之前跳过的零
         result.extend(part)
@@ -121,7 +138,10 @@ def _integer_tokens(text: str) -> List[str]:
 # 读取一个可选为负的十进制数；逐位读取小数位。
 def number_tokens(text: str) -> List[str]:
     sign, integer, fraction = _parse(text)  # 元组解包
-    result = ["负"] if sign == "-" else []
+    result = []
+    if sign == "-":
+        result.append("负")
+    # 如果有其他的符号就在这里修改
     arg = integer or "0"  # 如果整数部分是空则取0
     result.extend(_integer_tokens(arg))
     if fraction is not None:
