@@ -80,7 +80,6 @@ def main():
         print("3. 查看录音文件状态")
         print("4. 试听单字")
         print("5. 退出")
-        print("6. 保存读法到文件夹")
         choice = input("请选择【1-5】：").strip()
         if choice == "1":
             try:
