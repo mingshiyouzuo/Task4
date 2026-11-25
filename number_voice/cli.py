@@ -11,15 +11,6 @@ def read_text(prompt="请输入数字："):
     return input(prompt).strip()  # 去除字符首尾空白字符
 
 
-# def read_text(prompt="请输入数字："):
-#     text = input(prompt).strip()  # 去除前后空格
-#     if "," in text:  # 如果输入是千分位
-#         if not re.fullmatch(r"[0-9]{1,3}(,[0-9]{1,3})+", text):
-#             raise ValueError("逗号格式有误，请重新输入，例如123,345,345")
-#         text = text.replace(",", "")  # 去除逗号
-#     return text
-
-
 # 打印UI+返回mode字符串
 def choose_mode():
     print("选择读法：1. 数值读法 2. 逐位读法")
@@ -79,17 +70,6 @@ def play_number(store):
         print("无法播放：", e)
 
 
-# 保存读法
-# def save_reading():
-#     text = read_text()
-#     mode = choose_mode()
-#     tokens = show_reading(text, mode)
-#     with open("reading.txt", "w", encoding="utf-8") as f:
-#         f.write("\n".join(tokens))
-#     print("已保存到文件中")
-#     f.close()
-
-
 # 主函数
 def main():
     store = AudioStore()
@@ -100,8 +80,7 @@ def main():
         print("3. 查看录音文件状态")
         print("4. 试听单字")
         print("5. 退出")
-        # print("5. 保存读法到文件夹")
-        # print("6. 退出")
+        print("6. 保存读法到文件夹")
         choice = input("请选择【1-5】：").strip()
         if choice == "1":
             try:

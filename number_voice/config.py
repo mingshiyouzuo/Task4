@@ -8,7 +8,7 @@ RECOGNIZE_DIR = PROJECT_DIR / "recordings"
 # 音频设置
 SAMPLE_RATE = 22050  # 每秒采样次数，如果要能直接采用手机录音，建议用44100
 CHANNELS = 1  # 单声道
-SAMPLE_WIDTH = 2  # 每次采样2字节
+SAMPLE_WIDTH = 2  # 每次采样2字节，也就是位深16位
 
 # 字符与音频的对应关系
 TOKEN_FILES = dict(
@@ -38,12 +38,3 @@ TOKEN_FILES = dict(
 # 特殊符号的处理
 TOKEN_FILES["负"] = "fu"
 TOKEN_FILES["点"] = "dian"
-
-# 如果要打包
-import sys
-
-if getattr(sys, "frozen", False):
-    PROJECT_DIR = Path(sys.executable).resolve().parent
-else:
-    PROJECT_DIR = Path(__file__).resolve().parent.parent
-RECOGNIZE_DIR = PROJECT_DIR / "recordings"

@@ -66,18 +66,9 @@ class NumberReaderTests(unittest.TestCase):
                                   converter=converter.__name__):  # 每个组合是独立子测试，每一个测试用例使用到的函数在number_tokens与digit_tokens选一个
                     with self.assertRaises(ValueError):  # 断言"必须抛 ValueError"
                         converter(text)
-
-    # 测试大数
-    # def test_large_group_unit(self):
-    #     self.assertEqual("".join(number_tokens("100000000000000000000")), "一垓")
-
     # 测试两
     # def test_liang_for_two(self):
     #     self.assertEqual("".join(number_tokens("200")), "两百")
-
-    # 测试正数
-    # def test_positive(self):
-    #     self.assertEqual("".join(number_tokens("+12")), "正十二")
 
 
 if __name__ == "__main__":

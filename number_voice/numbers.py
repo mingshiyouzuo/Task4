@@ -17,7 +17,6 @@ def _parse(text: str) -> Tuple[str, str, Optional[str]]:
     body = text
 
     if text.startswith("-"):  # 如果开头是负号，就提取出来
-        # 如果要支持正号，if text[:1] in "+-":
         sign = text[0]
         body = text[1:]
 
@@ -48,6 +47,7 @@ def digit_tokens(text: str) -> List[str]:
     result = []
     if sign == "-":
         result.append("负")
+    # 如果有其他的符号就在这里修改
     result.extend(_digit_tokens(integer or "0"))
 
     if fraction is not None:
@@ -61,7 +61,7 @@ def digit_tokens(text: str) -> List[str]:
 def _group_tokens(value: int) -> List[str]:
     result = []
     pending_zero = False  # 添加零的处理逻辑
-    lead = len(str(value)) - 1  # 最高位对应的索引
+    # lead = len(str(value)) - 1  # 最高位对应的索引
 
     # 从高位向低位处理
     for position in range(3, -1, -1):
@@ -120,9 +120,8 @@ def _integer_tokens(text: str) -> List[str]:
         # 比如12表示为十二而不是一十二
         part = _group_tokens(group)  # 处理一组数字
         # 如果还需要特殊处理
-        if not result and index and group == 2:
-            part = ["两"]
-
+        # if not result and index and group == 2:
+        #     part = ["两"]
         if not result and len(part) >= 2 and part[:2] == ["一", "十"]:
             part.pop(0)  # 弹出之前跳过的零
         result.extend(part)
@@ -156,17 +155,3 @@ READING_MODES: Dict[str, Callable[[str], List[str]]] = {
     "数值读法": number_tokens,
     "逐位读法": digit_tokens,
 }
-
-# if __name__ == '__main__':
-# text = input("请输入一串数字：")
-# # 异常处理
-# try:
-#     tokens = digit_tokens(text)
-# except ValueError as e:
-#     print("输入有误：",e)
-# else:
-#     print("读法为："+"".join(tokens))
-
-# 测试四位数以内
-# for text in ("2382","1001","1000","101","10"):
-#     print(text,"->","".join(number_tokens(text)))
