@@ -80,10 +80,11 @@ python -m number_voice
 
 ## 发布
 
-最新版本：[v1.0.0](https://github.com/mingshiyouzuo/Task4/releases/tag/v1.0.0)
+最新版本：[v1.1.1](https://github.com/mingshiyouzuo/Task4/releases/tag/v1.1.1)
 
-- macOS arm64 可直接下载 Release 附件 `number-voice-v1.0.0-macos-arm64`，执行 `chmod +x` 后与 `recordings/` 放在同一目录运行。
+- macOS arm64 可直接下载 Release 附件 `number-voice-v1.1.1-macos-arm64`，执行 `chmod +x` 后与 `recordings/` 放在同一目录运行。
 - Windows / Linux 请从源码运行，或自行使用 PyInstaller 打包。
+- v1.1.1 修复 PyInstaller 打包后找不到 `recordings/` 的路径问题。
 - Release 不包含个人录音 WAV。
 
 ## 录音文件

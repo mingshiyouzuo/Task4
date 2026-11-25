@@ -1,8 +1,13 @@
 """这里存放项目配置：比如录音路径、音频参数、文件名等"""
+import sys
 from pathlib import Path
 
-# 设置项目录音路径
-PROJECT_DIR = Path(__file__).resolve().parent.parent
+# 源码运行时取项目根目录；PyInstaller 打包后取可执行文件所在目录
+if getattr(sys, "frozen", False):
+    PROJECT_DIR = Path(sys.executable).resolve().parent
+else:
+    PROJECT_DIR = Path(__file__).resolve().parent.parent
+
 RECOGNIZE_DIR = PROJECT_DIR / "recordings"
 
 # 音频设置
